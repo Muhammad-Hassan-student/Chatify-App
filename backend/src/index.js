@@ -1,12 +1,12 @@
 import express from 'express'
 
 import authRoutes from './routes/auth.route.js'
-
 import dotenv from 'dotenv'
-
 import { connectDb } from './lib/connect.db.js';
-
 import cookieparser from 'cookie-parser'
+
+//message
+import messageRoute from './routes/message.route.js'
 
 dotenv.config();
 
@@ -19,6 +19,7 @@ app.use(cookieparser());
 
 
 app.use("/api/auth",authRoutes);
+app.use("/api/message",messageRoute);
 app.listen(5001,() => {
     console.log("server running successfully");
     connectDb();
