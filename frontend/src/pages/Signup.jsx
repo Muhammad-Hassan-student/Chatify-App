@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, Lock, Mail, MessageSquare, User } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Loader2,
+  Lock,
+  Mail,
+  MessageSquare,
+  User,
+} from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuthStore } from "../store/useAuthStore";
 import AuthImagePattern from "../components/AuthImagePattern";
@@ -11,24 +19,26 @@ const Signup = () => {
     password: "",
   });
 
-  const {signUp,isSigninUp} = useAuthStore();
+  const { signUp, isSigninUp } = useAuthStore();
 
   const validateFormData = () => {
-      if(!formData.fullName.trim()) return toast.error("Full name is required");
-      if(!formData.email.trim()) return toast.error("Email is required");
-      if(!/\S+@\S+.\S+/.test(formData.email)) return toast.error("Invalid email format");
-      if(!formData.password) return toast.error("Password is required");
-      if(formData.password.length < 8) return toast.error("Password must be at least 8 characters");
+    if (!formData.fullName.trim()) return toast.error("Full name is required");
+    if (!formData.email.trim()) return toast.error("Email is required");
+    if (!/\S+@\S+.\S+/.test(formData.email))
+      return toast.error("Invalid email format");
+    if (!formData.password) return toast.error("Password is required");
+    if (formData.password.length < 8)
+      return toast.error("Password must be at least 8 characters");
 
-      return true;
-  }
+    return true;
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const success = validateFormData();
-    console.log(formData)
-    if(success === true) signUp(formData)
-  }
+    console.log(formData);
+    if (success === true) signUp(formData);
+  };
 
   return (
     <div className=" grid lg:grid-cols-2">
@@ -44,7 +54,9 @@ const Signup = () => {
               >
                 <MessageSquare className="size-6 text-primary" />
               </div>
-              <h1 className="text-2xl font-bold mt-2 text-white">Create Account</h1>
+              <h1 className="text-2xl font-bold mt-2 text-white">
+                Create Account
+              </h1>
               <p className="text-base-content/60 text-white">
                 Get started with your free account
               </p>
@@ -54,7 +66,9 @@ const Signup = () => {
         <form onSubmit={handleSubmit}>
           <div className="form-control">
             <label className="label text-white">
-              <span className="label-text font-medium text-white">Full Name</span>
+              <span className="label-text font-medium text-white">
+                Full Name
+              </span>
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -93,37 +107,49 @@ const Signup = () => {
 
             <div className="form-control">
               <label className="label text-white">
-                <span className="label-text font-medium text-white">Password</span>
+                <span className="label-text font-medium text-white">
+                  Password
+                </span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Lock className="size-5 text-base-content/40" />
                 </div>
                 <input
-                  type={showPassword? "text" : "password"}
+                  type={showPassword ? "text" : "password"}
                   className={`input input-bordered w-full pl-10`}
                   placeholder="••••••••"
                   value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  />
-                <button type="button" className="absolute inset-y-0 right-0 pr-3 flex items-center " onClick={() => {setShowPassword(!showPassword)}}>
-                  {showPassword ? <Eye /> : <EyeOff/>
-
+                  onChange={(e) =>
+                    setFormData({ ...formData, password: e.target.value })
                   }
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center "
+                  onClick={() => {
+                    setShowPassword(!showPassword);
+                  }}
+                >
+                  {showPassword ? <Eye /> : <EyeOff />}
                 </button>
               </div>
             </div>
           </div>
-          <button type="submit" className="btn btn-primary w-full" disabled={isSigninUp}>
-              {isSigninUp ? (
-                <>
-                  <Loader2 className="size-5 animate-spin" />
-                  Loading...
-                </>
-              ) : (
-                "Create Account"
-              )}
-            </button>
+          <button
+            type="submit"
+            className="btn btn-primary w-full"
+            disabled={isSigninUp}
+          >
+            {isSigninUp ? (
+              <>
+                <Loader2 className="size-5 animate-spin" />
+                Loading...
+              </>
+            ) : (
+              "Create Account"
+            )}
+          </button>
         </form>
       </div>
       <AuthImagePattern
