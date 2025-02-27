@@ -85,16 +85,17 @@ export const logout = async (req, res,next) => {
 //Profile pic update
 export const updateProfile = async (req,res,next) => {
   try {
-    const {profilePhoto}= req.body;
+    const {profilePhoto}= await req.body;
     const userId = req.user._id;
 
     if(!profilePhoto){
-      return next(errorHandler(400,"Profile image is required"));
+      return console.log("all fields are required");
     }
 
     const uploadResponse = await cloudinary.uploader.upload(profilePhoto);
     const updateUser = await userModel.findByIdAndUpdate(userId,{profilePhoto: uploadResponse.secure_url},{new: true});
-    res.status(200).json(updateUser);
+    return res.status(200).json(updateUser);
+  
   } catch (error) {
     console.log(error);
     next();
@@ -104,7 +105,13 @@ export const updateProfile = async (req,res,next) => {
 //Check user is login or not
 export const checkUser = async (req,res) => {
   try {
-    res.status(200).json(req.user);  
+    const user = req.user._id
+    if(!user){
+      return next(errorHandler(400,"User not found"));
+    }else{
+      res.status(200).json(req.user);  
+
+    }
   } catch (error) {
     console.log(error);
     next();
