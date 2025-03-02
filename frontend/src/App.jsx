@@ -9,10 +9,11 @@ import Login from './pages/Login'
 import SettingPage from './pages/SettingPage'
 import Profile from './pages/Profile'
 import {Toaster} from 'react-hot-toast'
+import { useThemeStore } from './store/useTheme'
 
 const App = () => {
   const {authUser,checkAuth,isCheckingAuth} = useAuthStore()
-
+  const {theme} = useThemeStore();
   useEffect(() => {
     checkAuth();
   },[checkAuth])
@@ -25,7 +26,7 @@ const App = () => {
     )
   }
   return (
-    <div className='min-h-screen bg-black'>
+    <div className='min-h-screen' data-theme = {theme}>
       <Navbar />
       <Routes>
         <Route path='/' element={authUser ? <HomePage/> : <Navigate to={"/login"} />} />
