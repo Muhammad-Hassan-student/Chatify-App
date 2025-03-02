@@ -1,4 +1,4 @@
-import cloudinary from "../lib/cloudinary.js";
+import {v2 as cloudinary} from 'cloudinary'
 import { generateToken } from "../lib/generateToken.js";
 import { errorHandler } from "../middleware/error.handler.js";
 import userModel from "../models/user.model.js";
@@ -89,13 +89,32 @@ export const updateProfile = async (req,res,next) => {
     const userId = req.user._id;
 
     if(!profilePhoto){
-      return console.log("all fields are required");
+      return next(errorHandler(400,"All field are required"));
     }
 
     const uploadResponse = await cloudinary.uploader.upload(profilePhoto);
-    const updateUser = await userModel.findByIdAndUpdate(userId,{profilePhoto: uploadResponse.secure_url},{new: true});
-    return res.status(200).json(updateUser);
+    console.log("uploadResponse: ", uploadResponse)
+    const updateUser = await userModel.findByIdAndUpdate(userId,{profilePhoto: uploadResponse?.secure_url},{new: true});
+     res.status(200).json(updateUser);
   
+  } catch (error) {
+    console.log(error);
+    next();
+  }
+}
+
+export const update = async (req,res,next) => {
+  const {profilePhoto } =await req.body;
+  const userId = req.user._id
+  console.log(userId);
+  if(!profilePhoto){
+    return next(errorHandler(400,"All field are required"));
+  }
+  try {
+    let uploadResponse = await cloudinary.uploader.upload(profilePhoto,{resource_type: 'image'});
+    let imageUrl = await uploadResponse.secure_url;
+    const updateUser = await userModel.findByIdAndUpdate(userId,{profilePhoto: imageUrl},{new: true});
+     res.status(200).json(updateUser);
   } catch (error) {
     console.log(error);
     next();

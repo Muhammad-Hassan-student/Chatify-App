@@ -9,23 +9,23 @@ const Profile = () => {
 
   const handleUploadImage = async (e) => {
     const file = e.target.files[0];
+    console.log("file" , file);
     if(!file) {return};
     //image file reader
     const reader = new FileReader();
 
-    reader.readAsDataURL(file);
+   await reader.readAsDataURL(file);
 
     reader.onload = async () => {
-      const base64Image =  reader.result;
+      const base64Image = await reader.result;
       setSelectedImage(base64Image);
-      await updateProfile({profilePhoto: base64Image});
+      await updateProfile( {profilePhoto: base64Image});
     }
   }
-  console.log(selectedImage);
   return (
-    <div className='min-h-screen bg-gray-900 pt-12 '>
+    <div className='min-h-screen bg-base-900 pt-12 '>
       <div className='max-w-2xl mx-auto p-8 py-6'>
-        <div className='bg-gray-900 rounded-xl p-6 space-y-8'>
+        <div className='bg-base rounded-xl p-6 space-y-8'>
           
           <div className='text-center'>
             <h1 className='text-2xl font-semibold text-white'>Profile</h1>
