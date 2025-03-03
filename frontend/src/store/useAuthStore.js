@@ -26,10 +26,12 @@ export const useAuthStore = create((set) => ({
     set({ isSigninUp: true });
     try {
       const response = await axiosInstance.post("/auth/signup", data);
-      set({ authUser: response.data });
-      toast.success("Sign up successfully");
+   
+    set({ authUser: response.data });
+    toast.success("Sign up successfully");
+   
     } catch (error) {
-      toast.error(error.respone.data.message);
+      toast.error(error.response.data.message);
     } finally {
       set({ isSigninUp: false });
     }

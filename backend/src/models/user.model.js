@@ -21,5 +21,5 @@ const userSchema = new mongoose.Schema({
     }
 },{timestamps: true});
 
-export const userModel =mongoose.models.User || mongoose.model("User",userSchema);// User is used as a reference 
+ const userModel =mongoose.model("User",userSchema);// User is used as a reference 
 export default userModel;

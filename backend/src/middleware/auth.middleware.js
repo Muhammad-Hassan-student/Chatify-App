@@ -13,7 +13,7 @@ export const userProtectRoute = async (req,res,next) => {
             return next(errorHandler(400,"invalid token"));
 
         }
-        const user = await userModel.findOne(decoded.userId).select('-password');
+        const user = await userModel.findById(decoded.userId).select('-password');
         if(!user){
             return next(errorHandler(403,"User not found"));
         }
