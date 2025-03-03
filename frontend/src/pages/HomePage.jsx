@@ -1,25 +1,22 @@
 import React from 'react'
+import Sidebar from '../components/Sidebar'
+import { useChatStore } from '../store/useChatStore'
+import NoChatSelected from '../components/NoChatSelected';
+import ChatContainer from '../components/ChatContainer';
 
 const HomePage = () => {
+  const {selectedUser} = useChatStore();
   return (
-    <div className='pt-10'> 
-      <div
-  className="hero min-h-45"
-  style={{
-    backgroundImage: "url(https://img.daisyui.com/images/stock/photo-1507358522600-9f71e620c44e.webp)",
-  }}>
-  <div className="hero-overlay bg-opacity-60"></div>
-  <div className="hero-content text-neutral-content text-center">
-    <div className="max-w-md">
-      <h1 className="mb-5 text-5xl font-bold">Hello there</h1>
-      <p className="mb-5">
-        Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem
-        quasi. In deleniti eaque aut repudiandae et a id nisi.
-      </p>
-      <button className="btn btn-primary">Get Started</button>
-    </div>
-  </div>
-</div>
+    <div className='h-screen bg-base-200'>
+      <div className='flex items-center  justify-center pt-20 px-4 border border-blue-500'>
+        <div className='bg-base-100 rounded-lg shadow-xl  w-full max-w-6xl h-[calc(100vh-8rem)]'>
+          <div className='flex h-full rounded-lg overflow-hidden'>
+            <Sidebar />
+
+            {!selectedUser ? <NoChatSelected/> : <ChatContainer/>}
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
