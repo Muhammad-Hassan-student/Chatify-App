@@ -15,7 +15,7 @@ export const userGetForSideBar = async (req,res,next) => {
 
 export const getMessages = async (req,res,next) => {
     try {
-        const {id: userToChatId} = req.params._id;
+        const {id: userToChatId} = req.params;
         const myId = req.user._id;
 
         const messages = await messageModel.find({
@@ -34,13 +34,13 @@ export const getMessages = async (req,res,next) => {
 export const sendMessage = async (req,res,next) => {
     try {
         const {text,image} = req.body;
-        const {id: receiverId }= req.params._id
+        const {id: receiverId }= req.params;
         const senderId = req.user._id;
 
         let imageUrl;
         if(image){
             const uploadResponse = await cloudinary.uploader.upload(image);
-            let imageUrl =  uploadResponse.secure_url;
+             imageUrl =  uploadResponse.secure_url;
         }
 
         const newMessage = new messageModel({
