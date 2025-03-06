@@ -14,7 +14,7 @@ const MessageInput = () => {
     if (!file.type.startsWith("image/")) {
       return toast.error("Please select an image file");
     }
-
+    //
     const reader = new FileReader();
     reader.onloadend = () => {
       setImagePreview(reader.result);

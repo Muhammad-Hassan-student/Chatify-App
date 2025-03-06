@@ -10,6 +10,7 @@ import SettingPage from './pages/SettingPage'
 import Profile from './pages/Profile'
 import {Toaster} from 'react-hot-toast'
 import { useThemeStore } from './store/useTheme'
+import PageNotFound from './components/PageNotFound'
 
 const App = () => {
   const {authUser,checkAuth,isCheckingAuth} = useAuthStore()
@@ -34,6 +35,7 @@ const App = () => {
         <Route path='/login' element={!authUser ? <Login/> : <Navigate to={"/"}/>} />
         <Route path='/setting' element={<SettingPage/>} />
         <Route path='/profile' element={authUser ? <Profile/> : <Navigate to={"/login"} />} />
+        <Route path='*' element={<PageNotFound />}/>
 
 
       </Routes>

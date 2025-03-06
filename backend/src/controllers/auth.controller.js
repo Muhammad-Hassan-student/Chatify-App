@@ -100,7 +100,7 @@ export const updateProfile = async (req, res, next) => {
     const userId = req.user._id;
 
     if (!profilePhoto) {
-      return next(errorHandler(400, "All field are required"));
+      return next(errorHandler(400, "Profile image is required"));
     }
 
     const uploadResponse = await cloudinary.uploader.upload(profilePhoto);
@@ -117,31 +117,32 @@ export const updateProfile = async (req, res, next) => {
   }
 };
 
-export const update = async (req, res, next) => {
-  const { profilePhoto } = await req.body;
-  const userId = req.user._id;
-  console.log(userId);
-  if (!profilePhoto) {
-    return next(errorHandler(400, "All field are required"));
-  }
-  try {
-    let uploadResponse = await cloudinary.uploader.upload(profilePhoto, {
-      resource_type: "image",
-    });
-    let imageUrl = await uploadResponse.secure_url;
-    const updateUser = await userModel.findByIdAndUpdate(
-      userId,
-      { profilePhoto: imageUrl },
-      { new: true }
-    );
-    res.status(200).json(updateUser);
-  } catch (error) {
-    console.log(error);
-    next();
-  }
-};
+// export const update = async (req, res, next) => {
+//   const { profilePhoto } = await req.body;
+//   const userId = req.user._id;
+//   console.log(userId);
+//   if (!profilePhoto) {
+//     return next(errorHandler(400, "All field are required"));
+//   }
+//   try {
+//     let uploadResponse = await cloudinary.uploader.upload(profilePhoto, {
+//       resource_type: "image",
+//     });
+//     let imageUrl = await uploadResponse.secure_url;
+//     const updateUser = await userModel.findByIdAndUpdate(
+//       userId,
+//       { profilePhoto: imageUrl },
+//       { new: true }
+//     );
+//     res.status(200).json(updateUser);
+//   } catch (error) {
+//     console.log(error);
+//     next();
+//   }
+// };
 
 //Check user is login or not
+
 export const checkUser = async (req, res,next) => {
   try {
   
