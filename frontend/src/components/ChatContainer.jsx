@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
 import { useChatStore } from "../store/useChatStore";
@@ -7,13 +7,34 @@ import { useAuthStore } from "../store/useAuthStore";
 import { formatMessageTime } from "../lib/utils";
 
 const ChatContainer = () => {
-  const { messages, getMessages, isMessageLoading, selectedUser } =
-    useChatStore();
+  const {
+    messages,
+    getMessages,
+    isMessageLoading,
+    selectedUser,
+    subscribeToMessages,
+    unSubsribeToMessages,
+  } = useChatStore();
+  const { authUser } = useAuthStore();
+  const messageEndRef = useRef(null);
 
   useEffect(() => {
     getMessages(selectedUser._id);
-  }, [getMessages, selectedUser._id]);
-  const { authUser } = useAuthStore();
+    subscribeToMessages();
+
+    return () => unSubsribeToMessages();
+  }, [
+    getMessages,
+    selectedUser._id,
+    subscribeToMessages,
+    unSubsribeToMessages,
+  ]);
+
+  useEffect(() => {
+    if (messageEndRef.current && messages) {
+      messageEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   if (isMessageLoading) {
     return (
@@ -35,6 +56,7 @@ const ChatContainer = () => {
             className={`chat ${
               message.senderId === authUser._id ? "chat-end" : "chat-start"
             }`}
+            ref={messageEndRef}
           >
             <div className=" chat-image avatar">
               <div className="size-10 rounded-full border">
@@ -48,7 +70,7 @@ const ChatContainer = () => {
                 />
               </div>
             </div>
-            
+
             <div className="chat-bubble flex flex-col">
               {message.image && (
                 <img
@@ -58,16 +80,13 @@ const ChatContainer = () => {
                 />
               )}
               {message.text && <p>{message.text}</p>}
-             
             </div>
             <div className="chat-bottom mb-1">
               <time className="text-xs opacity-50 ml-1 lowercase">
                 {formatMessageTime(message.createdAt)}
               </time>
             </div>
-           
           </div>
-          
         ))}
       </div>
       <MessageInput />

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useChatStore } from "../store/useChatStore";
 import SidebarSkeleton from "./Skeleton/SidebarSkeleton";
 import { Users } from "lucide-react";
@@ -10,11 +10,17 @@ const Sidebar = () => {
     useChatStore();
 
   const { onlineUsers } = useAuthStore();
+  const [showOnlyOnelineUser, setShowOnlyOnlineUsers] = useState(false);
 
   useEffect(() => {
     getUsers();
   }, [getUsers]);
 
+  const filteredUsers = showOnlyOnelineUser
+    ? users.filter((user) => onlineUsers.includes(user._id))
+    : users;
+
+  console.log(showOnlyOnelineUser);
   if (isUsersLoading) return <SidebarSkeleton />;
 
   return (
@@ -32,7 +38,12 @@ const Sidebar = () => {
             htmlFor="Online-User"
             className="cursor-pointer flex items-center gap-2"
           >
-            <input type="checkbox" className="checkbox checkbox-sm" />
+            <input
+              type="checkbox"
+              checked={showOnlyOnelineUser}
+              onChange={(e) => setShowOnlyOnlineUsers(e.target.checked)}
+              className="checkbox checkbox-sm"
+            />
             <span className="text-sm">Show online only</span>
           </label>
         </div>
@@ -40,7 +51,7 @@ const Sidebar = () => {
 
       {/*TODO: Main bar*/}
       <div className="overflow-y-auto w-full py-3">
-        {users.map((user) => (
+        {filteredUsers?.map((user) => (
           <button
             key={user._id}
             onClick={() => setSelectedUser(user)}
