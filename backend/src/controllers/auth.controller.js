@@ -59,7 +59,7 @@ export const login = async (req, res, next) => {
     if (!user) {
       return next(errorHandler(403, "Invalid credintials. Please try again"));
     }
-    const passwordIsMatch =  bcryptjs.compareSync(password, user.password);
+    const passwordIsMatch = bcryptjs.compareSync(password, user.password);
 
     if (!passwordIsMatch) {
       return next(errorHandler(403, "Invalid password. Please try again"));
@@ -81,12 +81,7 @@ export const login = async (req, res, next) => {
 //logout
 export const logout = async (req, res, next) => {
   try {
-    res
-    .clearCookie('token')
-    .status(200)
-    .json('User has been Logged out');
-    
-    
+    res.clearCookie("token").status(200).json("User has been Logged out");
   } catch (error) {
     console.log(error);
     next();
@@ -143,11 +138,44 @@ export const updateProfile = async (req, res, next) => {
 
 //Check user is login or not
 
-export const checkUser = async (req, res,next) => {
+export const checkUser = async (req, res, next) => {
   try {
-  
-      res.status(200).json(req.user);
-  
+    res.status(200).json(req.user);
+  } catch (error) {
+    console.log(error);
+    next();
+  }
+};
+
+export const google = async (req, res, next) => {
+  try {
+    const { fullName, email, profilePhoto } = req.body;
+
+    //check user
+    const user = await userModel.findOne({ email });
+    if (user) {
+      const token = generateToken(user._id, res);
+
+      const { password, ...rest } = user._doc;
+      res.status(200).json(rest);
+    } else {
+      //generate password if user is new
+      const generatePassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashedPassword = bcryptjs.hashSync(generatePassword, 10);
+      const newUser = new userModel({
+        fullName,
+        email,
+        password: hashedPassword,
+        profilePhoto,
+      });
+      await newUser.save();
+      const token = generateToken(newUser._id, res);
+      const { password, ...rest } = newUser._doc;
+      console.log(token);
+      res.json(rest);
+    }
   } catch (error) {
     console.log(error);
     next();

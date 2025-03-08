@@ -11,6 +11,7 @@ import {
 import toast from "react-hot-toast";
 import { useAuthStore } from "../store/useAuthStore";
 import AuthImagePattern from "../components/AuthImagePattern";
+import OAuth from "../components/OAuth";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -19,8 +20,8 @@ const Login = () => {
     password: "",
   });
 
-  const { login, isLogin } = useAuthStore();
-
+  const { login, isLogin,authUser } = useAuthStore();
+  
   const validateFormData = () => {
     if (!formData.email.trim()) return toast.error("Email is required");
     if (!/\S+@\S+.\S+/.test(formData.email))
@@ -128,6 +129,8 @@ const Login = () => {
             )}
           </button>
         </form>
+        <OAuth/>
+
       </div>
       <AuthImagePattern
         title="Join our community"
