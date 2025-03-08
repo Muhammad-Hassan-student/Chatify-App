@@ -32,7 +32,7 @@ const OAuth = () => {
   }, [authUser, navigate]); // Make sure navigate is part of the dependency array
   console.log(authUser);
   return (
-    <div className="w-64 mt-5">
+    <div className="w-60 mt-5">
       <button
         className="w-full flex justify-center gap-2 items-center  btn btn-primary"
         onClick={handleGoogle}

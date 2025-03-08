@@ -11,6 +11,10 @@ import {
 import toast from "react-hot-toast";
 import { useAuthStore } from "../store/useAuthStore";
 import AuthImagePattern from "../components/AuthImagePattern";
+import OAuth from "../components/OAuth";
+import { Link } from "react-router-dom";
+
+
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -136,6 +140,7 @@ const Signup = () => {
               </div>
             </div>
           </div>
+          <Link to={'/login'} className="my-2 flex justify-between items-center"><p className="text-sm">If you have account</p><span className="text-blue-500 text-sm">SIGN IN</span></Link>
           <button
             type="submit"
             className="btn btn-primary w-full"
@@ -151,6 +156,8 @@ const Signup = () => {
             )}
           </button>
         </form>
+        <OAuth/>
+
       </div>
       <AuthImagePattern
         title="Join our community"
